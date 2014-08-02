@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+
+	// "github.com/mattetti/goHtmlTemplateExample/handlers"
 )
 
 var templates *template.Template
@@ -13,6 +15,19 @@ var templates *template.Template
 // custom template delimiters since the Go default delimiters clash
 // with Angular's default.
 var templateDelims = []string{"{{%", "%}}"}
+
+type greetings struct {
+	Intro    string
+	Messages []string
+}
+
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+	passedObj := greetings{
+		Intro:    "Hello from Go!",
+		Messages: []string{"Hello!", "Hi!", "¡Hola!", "Bonjour!", "Ciao!", "<script>evilScript()</script>"},
+	}
+	templates.ExecuteTemplate(w, "homePage", passedObj)
+}
 
 func init() {
 	// initialize the templates,
